@@ -1,0 +1,3 @@
+feedback: true # extra-feedback messages on guessing item [default: true]
+scoreboard: true # default: true
+score: 1 # score is only available with scoreboard; integers only [default: 1]

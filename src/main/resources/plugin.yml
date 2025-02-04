@@ -2,8 +2,9 @@ name: itemguess
 version: '1.21.1-1.0'
 main: net.modekh.itemguess.ItemGuess
 api-version: '1.21'
-authors: [ Modekh ]
+author: Modekh
 description: Shh, do not reveal your item, but try to guess the others!
 commands:
   itemguess:
     description: Core plugin command to launch in-game processes - choose or guess the item.
+    usage: "Usage: /itemguess [start | stop | set | guess | help]"

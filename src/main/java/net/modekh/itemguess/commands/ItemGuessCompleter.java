@@ -19,7 +19,7 @@ public class ItemGuessCompleter implements TabCompleter {
 
         if (args.length == 1) {
             commands.add("start");
-            commands.add("reset");
+            commands.add("stop");
             commands.add("set");
             commands.add("guess");
             commands.add("help");
@@ -34,7 +34,9 @@ public class ItemGuessCompleter implements TabCompleter {
 
             if (args[0].equalsIgnoreCase("guess")) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    commands.add(player.getName());
+                    if (!player.getDisplayName().equals(sender.getName())) {
+                        commands.add(player.getName());
+                    }
                 }
             }
 

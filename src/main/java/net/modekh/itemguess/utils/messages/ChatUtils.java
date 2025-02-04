@@ -20,7 +20,7 @@ public class ChatUtils {
     }
 
     public static void sendServerMessage(Player player, String message) {
-        player.sendMessage(messageSender() + message);
+        player.sendMessage(serverMessage(message));
     }
 
     public static String serverMessage(String message) {

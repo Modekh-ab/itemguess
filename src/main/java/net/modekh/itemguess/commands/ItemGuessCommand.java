@@ -1,10 +1,7 @@
 package net.modekh.itemguess.commands;
 
 import net.modekh.itemguess.ItemGuess;
-import net.modekh.itemguess.events.EventListener;
-import net.modekh.itemguess.utils.EventUtils;
 import net.modekh.itemguess.utils.messages.ChatUtils;
-import net.modekh.itemguess.utils.messages.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -20,7 +17,6 @@ import java.util.UUID;
 
 public class ItemGuessCommand implements CommandExecutor {
     private static final Set<UUID> activePlayers = new HashSet<>();
-//    private static final Set<UUID> unsolvedPlayers = new HashSet<>();
     private final ItemGuess main;
 
     public ItemGuessCommand(ItemGuess main) {
@@ -81,8 +77,9 @@ public class ItemGuessCommand implements CommandExecutor {
                     return false;
 
                 if (opponent.equals(player)) {
-                    player.sendMessage( "You may have split personality, but for Minecraft "
-                            + getAquaName(player) + " is a single player!");
+                    ChatUtils.sendServerMessage(player, ChatUtils.formatMessage("&6",
+                            "You may have split personality, but for Minecraft "
+                                    + getAquaName(player) + " is a single player!"));
 
                     return false;
                 }
@@ -96,9 +93,10 @@ public class ItemGuessCommand implements CommandExecutor {
                         return false;
                     }
 
-                    EventUtils.addScore(player);
+                    if (main.isScoreboardEnabled()) {
+                        main.getListener().addScore(player);
+                    }
 
-//                    unsolvedPlayers.remove(player.getUniqueId());
                     ChatUtils.sendServerMessage(player, "You guessed "
                             + ChatUtils.aquaMessage(itemId) + ChatUtils.reset("!"));
 
@@ -120,7 +118,7 @@ public class ItemGuessCommand implements CommandExecutor {
         // op commands
 
         if (!sender.isOp()) {
-            sender.sendMessage(ChatColor.GOLD + "You don't have permission to use this command!");
+            sender.sendMessage(ChatColor.GOLD + "You must have permission to use this command!");
             return false;
         }
 
@@ -134,9 +132,9 @@ public class ItemGuessCommand implements CommandExecutor {
             }
         }
 
-        if (args[0].equalsIgnoreCase("reset")) {
+        if (args[0].equalsIgnoreCase("stop")) {
             try {
-                reset();
+                stop();
                 return true;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -153,34 +151,40 @@ public class ItemGuessCommand implements CommandExecutor {
     }
 
     private void start() throws SQLException {
+        Bukkit.getServer().broadcastMessage(
+                ChatUtils.serverMessage(ChatUtils.formatMessage("&d", "Tasks game started!")));
+
         for (Player player : Bukkit.getOnlinePlayers()) {
             main.getDatabase().addPlayerData(player);
-            main.getScoreboard().addPlayerToScoreboard(player);
             activePlayers.add(player.getUniqueId());
 
-            ChatUtils.sendServerMessage(player, ChatUtils.formatMessage("&d", "Tasks game started!"));
+            if (this.main.isScoreboardEnabled()) {
+                main.getScoreboard().addPlayerToScoreboard(player);
+            }
+
             player.playSound(player, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1.0f, 1.0f);
         }
     }
 
-    private void reset() throws SQLException {
+    private void stop() throws SQLException {
         main.getDatabase().resetDatabase();
         main.getScoreboard().resetScoreboard();
 
         activePlayers.clear();
-//        unsolvedPlayers.clear();
+
+        main.getServer().broadcastMessage(ChatUtils.serverMessage(
+                ChatUtils.formatMessage("&d", "Tasks game stopped.")));
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             // feedback to players
             player.playSound(player, Sound.ENCHANT_THORNS_HIT, 1.0f, 1.0f);
-            player.sendMessage(ChatUtils.serverMessage(ChatUtils.formatMessage("&d", "Tasks game reset.")));
         }
     }
 
     private void help(Player player) {
-        player.sendMessage(ChatUtils.serverMessage(ChatUtils.formatMessage("&d", "Commands usage:")));
+        ChatUtils.sendServerMessage(player, ChatUtils.formatMessage("&d", "Commands usage:"));
         sendHelpString(player, "start", "start ItemGuess game");
-        sendHelpString(player, "reset", "reset and stop ItemGuess game");
+        sendHelpString(player, "stop", "stop and reset ItemGuess game");
         sendHelpString(player, "set <item>", "set item to guess");
         sendHelpString(player, "guess <player> <item>", "guess someone's item");
     }
