@@ -1,6 +1,6 @@
 # ❔ Item Guess
 
-## 🚰 [SpigotMC]()
+## 🚰 [Modrinth]()
 
 ## 🌃 Abstract
 
@@ -17,4 +17,14 @@
 
 ## 🗝 Config
 
-_On its way_
+
+<details>
+<summary>Options to config</summary>
+
+- `Feedback Enabled` : extra-feedback messages on guessing item [default: `true`]
+- `Scoreboard Enabled` : display or hide scoreboard [default: `true`]
+- `Score` : the number of points that players will be rewarded with guessing prizes (only available with _scoreboard_; **integers** only) [default: `1`]
+
+</details>
+
+
