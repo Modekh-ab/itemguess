@@ -1,11 +1,11 @@
 # ❔ Item Guess
 
-## 🚰 [Modrinth]()
+## 🚰 [Modrinth](https://modrinth.com/plugin/itemguess)
 
 ## 🌃 Abstract
 
-- Native & tested **Minecraft version**: `1.21`
 - Plugin is about guessing other players' items to earn the score (or just for fun)
+- Native & tested **Minecraft version**: `1.21`
 
 ## 💭 Commands
 
