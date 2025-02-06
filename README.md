@@ -1,5 +1,6 @@
 # ❔ Item Guess
 
+## 🔨 [CurseForge](https://www.curseforge.com/minecraft/bukkit-plugins/item-guess)
 ## 🚰 [Modrinth](https://modrinth.com/plugin/itemguess)
 
 ## 🌃 Abstract
